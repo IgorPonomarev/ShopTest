@@ -67,9 +67,11 @@ fun MenuScreen(
 ) {
 
     val state by viewModel.appState.collectAsState()
-    val categories by remember(state) {
+
+    //filtered list
+    val filteredProducts by remember(state) {
         derivedStateOf {
-            state.products.distinctBy { it.category }.map { it.category }.toSet().toList()
+            state.products.filter { it.category == state.selectedCategory || state.selectedCategory == "" }
         }
     }
 
@@ -178,7 +180,7 @@ fun MenuScreen(
                     bottom = if (bannerSectionState is FixedScrollFlagState) MinBannerSectionHeight else 0.dp
                 )
             ) {
-                items(state.products) { product ->
+                items(filteredProducts) { product ->
                     ProductListItem(product = product)
                     Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
                     Spacer(modifier = Modifier.height(16.dp))
@@ -190,7 +192,9 @@ fun MenuScreen(
                     .fillMaxWidth()
                     .height(with(LocalDensity.current) { bannerSectionState.height.toDp() }),
                 progress = bannerSectionState.progress,
-                categories = categories
+                categories = state.categories,
+                selectedCategory = state.selectedCategory,
+                onCategoryClick = { viewModel.onCategoryClick(it) }
             )
         }
     }

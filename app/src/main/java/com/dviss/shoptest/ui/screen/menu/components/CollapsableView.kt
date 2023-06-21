@@ -26,7 +26,9 @@ import com.dviss.shoptest.R
 fun CollapsableView(
     modifier: Modifier = Modifier,
     progress: Float,
-    categories: List<String>
+    categories: List<String>,
+    selectedCategory: String,
+    onCategoryClick: (String) -> Unit = { }
 ) {
     val maxHeight = (136 * progress).dp
     Column(modifier = modifier) {
@@ -54,7 +56,11 @@ fun CollapsableView(
                 Spacer(modifier = Modifier.width(16.dp))
             }
             items(categories) {
-                CategoryItem(title = it)
+                CategoryItem(
+                    title = it,
+                    onCategoryClick = onCategoryClick,
+                    selected = it == selectedCategory
+                )
                 Spacer(modifier = Modifier.width(16.dp))
             }
         }
@@ -80,11 +86,13 @@ fun BannerItem(
 @Composable
 fun CategoryItem(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selected: Boolean = false,
+    onCategoryClick: (String) -> Unit = { }
 ) {
     FilterChip(
-        selected = false,
-        onClick = { },
+        selected = selected,
+        onClick = {onCategoryClick(title)},
         label = { Text(text = title) },
         modifier = modifier
     )

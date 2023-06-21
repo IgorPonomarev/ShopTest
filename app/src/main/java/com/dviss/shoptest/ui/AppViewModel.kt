@@ -18,7 +18,7 @@ class AppViewModel @Inject constructor(
     val appState = _appState.asStateFlow()
 
     init {
-        //downloadProducts()
+        downloadProducts()
         collectProducts()
     }
 
@@ -35,4 +35,14 @@ class AppViewModel @Inject constructor(
             }
         }
     }
+
+    fun onCategoryClick(category: String) {
+        if (category != _appState.value.selectedCategory) {
+            _appState.value = _appState.value.copy(selectedCategory = category)
+        } else {
+            _appState.value = _appState.value.copy(selectedCategory = "")
+        }
+    }
+
+
 }
